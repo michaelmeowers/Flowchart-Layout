@@ -1,0 +1,93 @@
+start
+    Declarations
+        num score
+        num questionsLeft
+        num clueValue
+        num timeLimit
+        string category
+        string response
+        string shouldRepeat
+        string clueUsed[9]
+
+    score = 0
+    questionsLeft = 9
+    timeLimit = 15
+    shouldRepeat = "Yes"
+
+    while shouldRepeat = "Yes"
+        playRound()
+    endwhile
+
+    displayFinalScore()
+stop
+
+
+playRound()
+    displayBoard()
+    getSelection()
+    askClue()
+    checkResponse()
+    questionsLeft = questionsLeft - 1
+    if questionsLeft > 0 then
+        shouldRepeat = "Yes"
+    else
+        shouldRepeat = "No"
+    endif
+return
+
+
+displayBoard()
+    output "Categories and remaining clues"
+    output "Score: ", score
+    output each category with its unused values ($100, $200, $300)
+return
+
+
+getSelection()
+    output "Pick a category and a dollar value"
+    input category, clueValue
+    while clueUsed for that category and value = "Yes"
+        output "That clue was already used. Pick again."
+        input category, clueValue
+    endwhile
+    mark that clue clueUsed = "Yes"
+return
+
+
+askClue()
+    output the clue for the chosen category and clueValue
+    start timer at timeLimit
+    input response
+    stop timer
+return
+
+
+checkResponse()
+    if timer expired then
+        output "Time's up! The correct response was: ", correct response
+        updateScore("subtract")
+    else
+        if response is correct and starts with "What is" or "Who is" then
+            output "Correct!"
+            updateScore("add")
+        else
+            output "Sorry, the correct response was: ", correct response
+            updateScore("subtract")
+        endif
+    endif
+return
+
+
+updateScore(string action)
+    if action = "add" then
+        score = score + clueValue
+    else
+        score = score - clueValue
+    endif
+return
+
+
+displayFinalScore()
+    output "Game over!"
+    output "Your final score is: ", score
+return
