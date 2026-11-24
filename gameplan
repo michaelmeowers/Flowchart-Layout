@@ -1,0 +1,30 @@
+3 categories with 3 questions each (9 questions total), worth $100, $200, and $300
+Each clue is shown as an answer, and the player must respond in the form of a question ("What is...?")
+15-second time limit per clue
+Score starts at $0. A correct response adds the clue's value, and a wrong or timed-out response subtracts it.
+The game ends when all 9 clues are used, and then the final score is displayed
+A flag variable, shouldRepeat, controls whether the player goes again
+
+Logical steps
+
+Start and set score = 0 and questionsLeft = 9
+Display the board
+Player picks a category and dollar value
+Display the clue and start the timer
+Get the player's response
+Check whether the response is correct and phrased as a question
+Yes: add the value to the score and show "Correct!"
+No: subtract the value from the score and show the correct response
+Mark the clue as used and subtract 1 from questionsLeft
+If questionsLeft > 0, set shouldRepeat = "Yes". Otherwise set shouldRepeat = "No".
+If shouldRepeat = "Yes", go back to step 2
+Display the final score and end
+
+Modules (to avoid repeated steps)
+
+displayBoard(): shows the remaining clues
+getSelection(): gets the category and value
+askClue(): displays the clue, runs the timer, and gets the response
+checkResponse(): tests whether the response is correct and in question form
+updateScore(): adds or subtracts the clue's value
+displayFinalScore(): shows the result at the end
