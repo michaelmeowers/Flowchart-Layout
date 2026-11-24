@@ -1,30 +1,93 @@
-3 categories with 3 questions each (9 questions total), worth $100, $200, and $300
-Each clue is shown as an answer, and the player must respond in the form of a question ("What is...?")
-15-second time limit per clue
-Score starts at $0. A correct response adds the clue's value, and a wrong or timed-out response subtracts it.
-The game ends when all 9 clues are used, and then the final score is displayed
-A flag variable, shouldRepeat, controls whether the player goes again
+start
+    Declarations
+        num score
+        num questionsLeft
+        num clueValue
+        num timeLimit
+        string category
+        string response
+        string shouldRepeat
+        string clueUsed[9]
 
-Logical steps
+    score = 0
+    questionsLeft = 9
+    timeLimit = 15
+    shouldRepeat = "Yes"
 
-Start and set score = 0 and questionsLeft = 9
-Display the board
-Player picks a category and dollar value
-Display the clue and start the timer
-Get the player's response
-Check whether the response is correct and phrased as a question
-Yes: add the value to the score and show "Correct!"
-No: subtract the value from the score and show the correct response
-Mark the clue as used and subtract 1 from questionsLeft
-If questionsLeft > 0, set shouldRepeat = "Yes". Otherwise set shouldRepeat = "No".
-If shouldRepeat = "Yes", go back to step 2
-Display the final score and end
+    while shouldRepeat = "Yes"
+        playRound()
+    endwhile
 
-Modules (to avoid repeated steps)
+    displayFinalScore()
+stop
 
-displayBoard(): shows the remaining clues
-getSelection(): gets the category and value
-askClue(): displays the clue, runs the timer, and gets the response
-checkResponse(): tests whether the response is correct and in question form
-updateScore(): adds or subtracts the clue's value
-displayFinalScore(): shows the result at the end
+
+playRound()
+    displayBoard()
+    getSelection()
+    askClue()
+    checkResponse()
+    questionsLeft = questionsLeft - 1
+    if questionsLeft > 0 then
+        shouldRepeat = "Yes"
+    else
+        shouldRepeat = "No"
+    endif
+return
+
+
+displayBoard()
+    output "Categories and remaining clues"
+    output "Score: ", score
+    output each category with its unused values ($100, $200, $300)
+return
+
+
+getSelection()
+    output "Pick a category and a dollar value"
+    input category, clueValue
+    while clueUsed for that category and value = "Yes"
+        output "That clue was already used. Pick again."
+        input category, clueValue
+    endwhile
+    mark that clue clueUsed = "Yes"
+return
+
+
+askClue()
+    output the clue for the chosen category and clueValue
+    start timer at timeLimit
+    input response
+    stop timer
+return
+
+
+checkResponse()
+    if timer expired then
+        output "Time's up! The correct response was: ", correct response
+        updateScore("subtract")
+    else
+        if response is correct and starts with "What is" or "Who is" then
+            output "Correct!"
+            updateScore("add")
+        else
+            output "Sorry, the correct response was: ", correct response
+            updateScore("subtract")
+        endif
+    endif
+return
+
+
+updateScore(string action)
+    if action = "add" then
+        score = score + clueValue
+    else
+        score = score - clueValue
+    endif
+return
+
+
+displayFinalScore()
+    output "Game over!"
+    output "Your final score is: ", score
+return
